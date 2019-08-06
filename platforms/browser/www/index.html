@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+    <title>Gif To Atlas Converter</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+	<link rel="stylesheet" type="text/css" href="css/jquery-ui.css" />
+</head>
+
+<body>
+    <div id='background'>
+		<div id='animInfo' >
+			<div id='canvasHolder'>
+				<div id='gifcanvasDiv' style='position: relative;'>
+					<div  id='cropMouse' style='position: absolute;'></div>
+					<div  id='cropCanvasBB' style='position: absolute;'>
+						<div id='cropHandlesHolder' >
+							<div id='cropBBHandle1'></div>
+							<div id='cropBBHandle2'></div>
+							<div id='cropBBHandle3'></div>
+							<div id='cropBBHandle4'></div>
+						</div>
+					</div>
+					<canvas id='cropCanvas' style='position: absolute;'></canvas>
+					<canvas id='gifcanvas' ></canvas>
+				</div>
+			</div>
+			<div id='duration'></div>
+			<div id='thumbnail'></div>
+		</div>
+		<div id='timelineControls'>
+			<div>
+				<div style="width: 95%; mardin: auto !important;" id="slider-range"></div>
+			</div>
+		</div>
+		<div id='buttons' >
+				<table style='padding: 10px;'>
+					<tr>
+						<td style='width:60px;' >
+							<input id="openLabel"  value=" " type="button"/><input type="file" id="openFile"/>
+						</td>
+						<td style='width: 100%; text-align:center;'>
+							<div id='controlButtons'>
+								<div id='playButton'>
+										<input id='playCheckbox' type="checkbox" value="1" />
+								</div>
+								<div id='stopButton'></div>
+								<div id='loopButton'>
+										<input id='loopCheckbox' type="checkbox" value="1" />
+								</div>
+							</div>
+						</td>
+						<td style='width:60px;' >
+							<button id="previewButton"><canvas id='preview' width=30 height=30></canvas></button>
+						</td>
+						<td style='width:60px;' >
+							<button id="saveButton" >&nbsp;</button>
+						</td>
+						
+					</tr>
+				</table>
+		</div>
+	</div>
+	
+    <script type="text/javascript" src="cordova.js"></script>
+	<script type="text/javascript" src="js/gifuct-js.js"></script>
+	<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
+	<script type="text/javascript" src="js/jquery-ui.js"></script>
+	<script type="text/javascript" src="js/jquery.ui.touch-punch.js"></script>
+	<script type="text/javascript" src="js/app.js"></script>
+	
+	
+</body>
+</html>

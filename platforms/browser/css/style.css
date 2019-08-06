@@ -1,0 +1,273 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+	padding: 0;
+    overflow: hidden;
+	color: white;
+}
+
+#background {
+	background: url('../img/Back1.png') no-repeat ;
+	/*background-color: green;*/
+	background-size: 100% 100%;
+	width: 100%;
+    height: 100%;
+	display: table;
+	margin: auto;
+	padding: 0;
+}
+
+
+#animInfo{
+	display: table-row;
+	height: 80%;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	text-align: center;
+}
+
+/* ------------ Timeline animation controllers ------------ */
+#timelineControls{
+	display: table-row;
+	height: 30px;
+	text-align: center;
+	margin: 0;
+	padding: 0;
+}
+
+#slider-range{
+	width: 88% !important;
+	text-align: center;
+	margin: auto;
+}
+
+/* ------------ Buttons animation controllers ------------ */
+#buttons{
+	display: table-row;
+	width: 100%;
+	height: 30px;
+	margin: 0;
+	padding: 0;
+}
+
+#openFile{
+	width: 0px;
+	height: 0px;
+	line-height:0px;
+	font: 0px;
+	display: none;
+}
+
+#openLabel{
+	cursor: pointer;
+	width: 30px;
+	height: 30px;
+	padding: 0px;
+	display: inline-block;
+	border: none;
+	background: url('../img/all_buttons.png') no-repeat ;
+	background-position: -150px 0px;
+	background-size: 210px 30px;
+}
+
+#openLabel:focus {outline:0;}
+
+#shareButton{
+	cursor: pointer;
+	width: 30px;
+	height: 30px;
+	display:block;
+	border: none;
+	background: url('../img/all_buttons.png') no-repeat ;
+	background-position: -180px 0px;
+	background-size: 210px 30px;
+}
+
+#shareButton:focus {outline:0;}
+
+#saveButton{
+	cursor: pointer;
+	width: 30px;
+	height: 30px;
+	display:block;
+	border: none;
+	margin: 0 10px 0 0;
+	background: url('../img/all_buttons.png') no-repeat ;
+	background-position: -120px 0px;
+	background-size: 210px 30px;
+}
+
+#saveButton:focus {outline:0;}
+
+/* ------------ Playback block ------------ */
+#controlButtons{
+	width: 200px;
+	height: 30px;
+	display: inline-block;
+	overflow:hidden;
+	margin: 0 auto;
+	padding: 0px;
+}
+
+#controlButtons div{
+	margin: 0 8px;
+}
+
+#playButton{
+	width: 30px;
+	height: 30px;
+	display: inline-block;
+	overflow:hidden;
+	background: url('../img/all_buttons.png') no-repeat ;
+	background-position: 0px 0px;
+	background-size: 210px 30px;
+}
+
+#playButton:active {
+	-webkit-filter: brightness(0.5);
+    filter: brightness(0.5);
+}
+
+#playButton input{
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+}
+
+#stopButton{
+	width: 30px;
+	height: 30px;
+	display: inline-block;
+	overflow:hidden;
+	background: url('../img/all_buttons.png') no-repeat ;
+	background-position: -60px 0px;
+	background-size: 210px 30px;
+}
+
+#stopButton:active {
+	-webkit-filter: brightness(0.5);
+    filter: brightness(0.5);
+}
+
+#loopButton{
+	width: 30px;
+	height: 30px;
+	display: inline-block;
+	overflow:hidden;
+	box-sizing: border-box;
+	background: url('../img/all_buttons.png') no-repeat ;
+	background-position: -90px 0px;
+	background-size: 210px 30px;
+}
+
+#loopButton:active {
+	-webkit-filter: brightness(0.5);
+    filter: brightness(0.5);
+}
+
+#loopButton input{
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+}
+
+/* ------------ Info block ------------ */
+
+#duration{
+	color: white;
+	position: absolute;
+	left: 0;
+	width: 300px;
+	height: 500px;
+	white-space: pre-wrap;       /* css-3 */
+	word-wrap: break-word;       /* Internet Explorer 5.5+ */
+	word-break: break-all;
+}
+
+#gifcanvas{
+	border-radius: 0px;
+	
+}
+
+#cropArea{
+	position: relative;
+	top:0;
+	left:0;
+	background: blue;
+}
+
+#canvasHolder{
+	width: 100%;
+	height: 100%;
+	display: table-cell;
+	vertical-align: middle;
+	padding: 0;
+	visibility: hidden;
+}
+
+#canvasHolder div{
+	width: 80%;
+	height: 80%;
+	margin: auto auto;
+	padding: 0;
+	display: block;
+}
+
+/* ------------ Debug class to visualize block areas ------------ */
+.debug{
+	background-color: rgba(255, 255, 255, 0.5) !important;
+	border: 1px solid red !important;
+}
+
+
+/* ------------ Crop UI element design ------------ */
+#cropCanvasBB {
+	margin: 10px;
+	padding: 10px;
+    outline: 1px  dashed white; 
+	box-shadow: 0 0 0 1px black;
+	opacity: 0.5;
+	z-index:100;
+}
+
+#cropMouse{
+	width: 100% !important;
+	height: 100% !important;	
+	z-index:300;
+}
+
+#cropHandlesHolder{
+	width: 100% !important;
+	height: 100% !important;	
+	position: relative;
+}
+
+#cropHandlesHolder div{
+	width: 20px;
+	height: 20px;
+	border-radius: 10px;
+	background: white;
+	position: absolute;
+}
+
+#cropBBHandle1{
+	top: -10px;
+	left: -10px;
+}
+
+#cropBBHandle2{
+	top: -10px;
+	right: -10px;
+}
+
+#cropBBHandle3{
+	bottom: -10px;
+	left: -10px;
+}
+
+#cropBBHandle4{
+	bottom: -10px;
+	right: -10px;
+}
