@@ -518,14 +518,15 @@
 	function errorHandle(e){
 		SpinnerPlugin.activityStop();
 	}
+	
 	function errorMassage() {}
 
 	function successMessage( status ) {
-	  if( !status.hasPermission ) error();
+	  if( !status.hasPermission ) errorMassage();
 	}
 	
 	function init(){
-		permissions.requestPermission(permissions.WRITE_EXTERNAL_STORAGE, success, error);
+		permissions.requestPermission(permissions.WRITE_EXTERNAL_STORAGE, successMessage, errorMassage);
 		language = navigator.language; 
 	}
 	
