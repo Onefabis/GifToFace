@@ -48,9 +48,9 @@
 	<gap:plugin name="nodejs-mobile-cordova" source="npm"  version="0.3.3" />
 	<gap:plugin name="nodejs-cordova-plugin" source="npm"  version="2.1.0" />
 
-	<gap:config-file platform="android" parent="/manifest" >
+	<config-file platform="android" parent="/manifest" >
 		<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	</gap:config-file>  
+	</config-file>  
 
     <platform name="android">
         <icon density="ldpi" src="www/res/icon/android/drawable-ldpi-icon.png" />
