@@ -514,21 +514,19 @@
 			fileWriter.write(dataObj);
 		});
 	}
+	function
 	
 	function errorHandle(e){
 		SpinnerPlugin.activityStop();
 	}
+	function errorMassage() {}
 
-function error() {
-  console.warn('Camera permission is not turned on');
-}
-
-function success( status ) {
-  if( !status.hasPermission ) error();
-}
+	function successMessage( status ) {
+	  if( !status.hasPermission ) error();
+	}
 	
 	function init(){
-	permissions.requestPermission(permissions.WRITE_EXTERNAL_STORAGE, success, error);
+		permissions.requestPermission(permissions.WRITE_EXTERNAL_STORAGE, success, error);
 		language = navigator.language; 
 	}
 	
