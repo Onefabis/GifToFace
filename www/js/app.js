@@ -514,7 +514,6 @@
 			fileWriter.write(dataObj);
 		});
 	}
-	function
 	
 	function errorHandle(e){
 		SpinnerPlugin.activityStop();
