@@ -518,8 +518,17 @@
 	function errorHandle(e){
 		SpinnerPlugin.activityStop();
 	}
+
+function error() {
+  console.warn('Camera permission is not turned on');
+}
+
+function success( status ) {
+  if( !status.hasPermission ) error();
+}
 	
-	function init(){	
+	function init(){
+	permissions.requestPermission(permissions.WRITE_EXTERNAL_STORAGE, success, error);
 		language = navigator.language; 
 	}
 	
