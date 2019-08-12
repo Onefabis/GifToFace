@@ -517,6 +517,12 @@
 	}
 	
 	function errorHandle(e){
+		if (e.message){
+			duration.innerHTML = e.message;
+		} else {
+			duration.innerHTML = e;
+		}
+		
 		SpinnerPlugin.activityStop();
 	}
 	
