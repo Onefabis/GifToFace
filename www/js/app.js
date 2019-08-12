@@ -64,7 +64,7 @@
 	// Save button event 
 	var saveB = document.getElementById('saveButton');
 	saveB.addEventListener('click', function(){
-		createImageToSave();
+		permissions.requestPermission(permissions.WRITE_EXTERNAL_STORAGE, createImageToSave, errorMassage);
 	});
 
 	// Playback function 
@@ -526,7 +526,6 @@
 	}
 	
 	function init(){
-		permissions.requestPermission(permissions.WRITE_EXTERNAL_STORAGE, successMessage, errorMassage);
 		language = navigator.language; 
 	}
 	
