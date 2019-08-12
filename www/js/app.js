@@ -482,7 +482,7 @@
 											writeFile( fileEntry, blob );
 										}, "image/png", 0.9 );
 									}, errorHandle(e));
-								}, errorHandle(e));
+								}, errorHandle());
 							});
 						}, errorHandle(e));
 					});
@@ -517,10 +517,14 @@
 	}
 	
 	function errorHandle(e){
-		if (e.message){
-			duration.innerHTML = e.message;
+		if(e){
+			if (e.message){
+				duration.innerHTML = e.message;
+			} else {
+				duration.innerHTML = e;
+			}
 		} else {
-			duration.innerHTML = e;
+			duration.innerHTML = 'folder';	
 		}
 		
 		SpinnerPlugin.activityStop();
