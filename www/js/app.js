@@ -433,7 +433,7 @@
 			SpinnerPlugin.activityStart(MES[1], { dimBackground: true });
 			var frameCount = Math.round( totalDuration/Math.round(1000/fps) );
 			if (minTimeRangeVal>=0 && maxTimeRangeVal){
-				frameCount = Math.round( (delays.slice(minTimeRangeVal, maxTimeRangeVal).reduce((x, y) => x + y))/Math.round(1000/fps) );
+				frameCount = Math.round( (delays.slice(minTimeRangeVal, maxTimeRangeVal).reduce((x, y) => x + y))/(1000/fps) );
 			}
 			saveFramesCanvases.push(framesCanvases[minTimeRangeVal])
 			var timeAnchor = delays[minTimeRangeVal];
