@@ -431,7 +431,7 @@
 				fps = 12;
 			}
 			SpinnerPlugin.activityStart(MES[1], { dimBackground: true });
-			var frameCount = Math.round( totalDuration/Math.round(1000/fps) );
+			var frameCount = Math.round( totalDuration/(1000/fps) );
 			if (minTimeRangeVal>=0 && maxTimeRangeVal){
 				frameCount = Math.round( (delays.slice(minTimeRangeVal, maxTimeRangeVal).reduce((x, y) => x + y))/(1000/fps) );
 			}
