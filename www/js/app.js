@@ -216,6 +216,8 @@
 					SpinnerPlugin.activityStop();	
 				}
 			reader.readAsArrayBuffer(this.files[0]);
+			
+			reader.onerror = errorCatcher('gif is not animated')
 				
 		};	
 		
@@ -480,12 +482,12 @@
 										saveCanvas.toBlob(function(blob) {
 											writeFile( fileEntry, blob );
 										}, "image/png", 0.9 );
-									}, function(){});
-								}, function(){});
+									}, errorCatcher('file in folder not created') );
+								},  errorCatcher('folder not created') );
 							});
-						}, function(){});
+						}, errorCatcher('file not created') );
 					});
-				} catch(e){};
+				} catch(e){ errorCatcher(e) };
 			}	
 		}
 	}
@@ -498,8 +500,6 @@
 					var preview = document.getElementById('preview');
 					var previewCtx = preview.getContext('2d');
 					previewCtx.drawImage( saveFramesCanvases[0], 0, 0, 30, 30 );
-					console.log(fileEntry.toURL() );
-					
 					preview.onclick = function() { 
 						startApp.set({
 							"action": "ACTION_VIEW",
@@ -510,9 +510,13 @@
 					}
 				SpinnerPlugin.activityStop();
 				}
-			fileWriter.onerror = function (e) {};
+			fileWriter.onerror = errorCatcher(e);
 			fileWriter.write(dataObj);
 		});
+	}
+	
+	function errorCatcher(e){
+		SpinnerPlugin.activityStop();
 	}
 	
 	function init(){	
