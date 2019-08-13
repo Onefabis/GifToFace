@@ -64,8 +64,7 @@
 	// Save button event 
 	var saveB = document.getElementById('saveButton');
 	saveB.addEventListener('click', function(){
-		var permissions = cordova.plugins.permissions;
-		permissions.requestPermission(permissions.WRITE_EXTERNAL_STORAGE, createImageToSave, errorMassage);
+		createImageToSave();
 	});
 
 	// Playback function 
@@ -126,91 +125,98 @@
 			renderCanvas = document.getElementById('gifcanvas');
 			renderCanvasDiv = document.getElementById('gifcanvasDiv');
 			renderCanvasCtx = renderCanvas.getContext('2d',{ alpha: true });
+			
 			var animInfo = document.getElementById('animInfo');
+			
 				var reader = new FileReader();
 				reader.onload = function() {
-					try{
-						SpinnerPlugin.activityStart(MES[0], { dimBackground: true })
-						var arrayBuffer = this.result;
-						var gif = new GIF(arrayBuffer);
-						var frames = gif.decompressFrames(true);
-						mainWidth = frames[0].dims.width;
-						mainHeight = frames[0].dims.height;
-						var tempMainCanvas = document.createElement('canvas');
-						tempMainCanvas.width = mainWidth;
-						tempMainCanvas.height = mainHeight;
-						var tempMainCanvasCtx = tempMainCanvas.getContext('2d');
-						for (k = 0; k<frames.length; k++){
-							delays.push(frames[k].delay);
-							var tempCanvas = document.createElement('canvas');
-							tempCanvas.width = frames[0].dims.width;
-							tempCanvas.height = frames[0].dims.height;
-							var tempCanvasCtx = tempCanvas.getContext('2d');
-							tempCanvasCtx.putImageData( new ImageData( frames[k].patch, frames[k].dims.width, frames[k].dims.height ), frames[k].dims.left, frames[k].dims.top, 0, 0, frames[0].dims.width, frames[0].dims.height  );
-							if(frames[k].disposalType==2){
-								tempMainCanvasCtx.fillStyle = "black";
-								tempMainCanvasCtx.fillRect(0, 0, mainWidth, mainHeight);
-							}
-							tempMainCanvasCtx.drawImage(tempCanvas, 0, 0 );
-							tempCanvasCtx.drawImage(tempMainCanvas, 0, 0 );
-							framesCanvases[k] = tempCanvas;
-						}
-						var delayResult = delays.filter(word => (word));
-						var averageDelay = Math.round( (delayResult.reduce( ( x, y ) => x + y) )/delayResult.length )
-						delays=delays.map(function(elem){ return (!elem)?averageDelay:elem; });
-						canvasHolder.style.visibility = 'visible';
-						canvasHolder.style.opacity = 0;
-						// Check whether parent div smaller than loaded GIF, if so then store multiplier that scale down renderCanvas and renderCanvasDiv
-						if ( animInfo.offsetWidth <= mainWidth || animInfo.offsetHeight <= mainHeight){
-							var offscreenCanvasX = animInfo.offsetWidth/mainWidth;
-							var offscreenCanvasY = animInfo.offsetHeight/mainHeight;
-							resizeMult = Math.min(offscreenCanvasX, offscreenCanvasY)
-						};
-						// Resize renderCanvas element
-						renderCanvasDiv.style.width = mainWidth*resizeMult + 'px';
-						renderCanvasDiv.style.height = mainHeight*resizeMult + 'px';
-						renderCanvas.width = mainWidth*resizeMult;
-						renderCanvas.height = mainHeight*resizeMult;
-						minTimeRangeVal = 0;
-						maxTimeRangeVal = delays.length-1;
-						renderCanvasCtx.drawImage( framesCanvases[0], 0, 0, mainWidth, mainHeight, 0, 0, renderCanvas.width, renderCanvas.height );
-						renderCrop();
-						$(function() {
-							playFrame = 0;
-							duration.innerHTML = Math.round( ( delays.slice(minTimeRangeVal, maxTimeRangeVal).reduce((x, y) => x + y))/1e3 ) + MES[4];
-							// Draw playbak slider with minimal time as minTimeRangeVal and maximum time as maxTimeRangeVal
-							$('#slider-range').slider({
-								range: true,
-								min: 0,
-								max: delays.length-1, 
-								values: [ 0, delays.length-1 ],
-								slide: function( event, ui ) {
-									if( minTimeRangeVal != ui.values[ 0 ] ){
-										minTimeRangeVal = ui.values[ 0 ];
-										playFrame = ui.values[ 0 ];
-										renderCanvasCtx.drawImage( framesCanvases[ui.values[ 0 ]], 0, 0, mainWidth, mainHeight, 0, 0, renderCanvas.width, renderCanvas.height );
-									};
-									if( maxTimeRangeVal != ui.values[ 1 ] ){
-										maxTimeRangeVal = ui.values[ 1 ];
-										renderCanvasCtx.clearRect( 0, 0, renderCanvas.width, renderCanvas.height );
-										renderCanvasCtx.drawImage( framesCanvases[ui.values[ 1 ]], 0, 0, mainWidth, mainHeight, 0, 0, renderCanvas.width, renderCanvas.height );
-										if( ui.values[ 1 ] -2 > ui.values[ 0 ]){
-											playFrame = ui.values[ 1 ]-2;
-										} else {
-											playFrame = ui.values[ 1 ];
-										}	
-									};
-									if ( minTimeRangeVal < maxTimeRangeVal) {
-										duration.innerHTML = Math.round( ( delays.slice(minTimeRangeVal, maxTimeRangeVal).reduce((x, y) => x + y))/1e3) + MES[4];
-									}
-								}	
-							});
-						});
-						SpinnerPlugin.activityStop();	
+					SpinnerPlugin.activityStart(MES[0], { dimBackground: true })
+					var arrayBuffer = this.result;
+					var gif = new GIF(arrayBuffer);
+					var frames = gif.decompressFrames(true);
+					mainWidth = frames[0].dims.width;
+					mainHeight = frames[0].dims.height;
+					var tempMainCanvas = document.createElement('canvas');
+					tempMainCanvas.width = mainWidth;
+					tempMainCanvas.height = mainHeight;
+					var tempMainCanvasCtx = tempMainCanvas.getContext('2d');
+					for (k = 0; k<frames.length; k++){
+						delays.push(frames[k].delay);
+						var tempCanvas = document.createElement('canvas');
+						tempCanvas.width = frames[0].dims.width;
+						tempCanvas.height = frames[0].dims.height;
+						var tempCanvasCtx = tempCanvas.getContext('2d');
 						
-					} catch(e){errorHandle(e)};
+						tempCanvasCtx.putImageData( new ImageData( frames[k].patch, frames[k].dims.width, frames[k].dims.height ), frames[k].dims.left, frames[k].dims.top, 0, 0, frames[0].dims.width, frames[0].dims.height  );
+						if(frames[k].disposalType==2){
+							tempMainCanvasCtx.fillStyle = "black";
+							tempMainCanvasCtx.fillRect(0, 0, mainWidth, mainHeight);
+						}
+						tempMainCanvasCtx.drawImage(tempCanvas, 0, 0 );
+						tempCanvasCtx.drawImage(tempMainCanvas, 0, 0 );
+						framesCanvases[k] = tempCanvas;
+					}
+					var delayResult = delays.filter(word => (word));
+					var averageDelay = Math.round( (delayResult.reduce( ( x, y ) => x + y) )/delayResult.length )
+					delays=delays.map(function(elem){ return (!elem)?averageDelay:elem; });
+					
+					canvasHolder.style.visibility = 'visible';
+					canvasHolder.style.opacity = 0;
+					
+					
+					// Check whether parent div smaller than loaded GIF, if so then store multiplier that scale down renderCanvas and renderCanvasDiv
+					if ( animInfo.offsetWidth <= mainWidth || animInfo.offsetHeight <= mainHeight){
+						var offscreenCanvasX = animInfo.offsetWidth/mainWidth;
+						var offscreenCanvasY = animInfo.offsetHeight/mainHeight;
+						resizeMult = Math.min(offscreenCanvasX, offscreenCanvasY)
+					};
+					// Resize renderCanvas element
+					renderCanvasDiv.style.width = mainWidth*resizeMult + 'px';
+					renderCanvasDiv.style.height = mainHeight*resizeMult + 'px';
+					renderCanvas.width = mainWidth*resizeMult;
+					renderCanvas.height = mainHeight*resizeMult;
+					
+					minTimeRangeVal = 0;
+					maxTimeRangeVal = delays.length-1;
+					
+					renderCanvasCtx.drawImage( framesCanvases[0], 0, 0, mainWidth, mainHeight, 0, 0, renderCanvas.width, renderCanvas.height );
+					renderCrop();
+					$(function() {
+						playFrame = 0;
+						duration.innerHTML = Math.round( ( delays.slice(minTimeRangeVal, maxTimeRangeVal).reduce((x, y) => x + y))/1e3 ) + MES[4];
+						// Draw playbak slider with minimal time as minTimeRangeVal and maximum time as maxTimeRangeVal
+						$('#slider-range').slider({
+							range: true,
+							min: 0,
+							max: delays.length-1, 
+							values: [ 0, delays.length-1 ],
+							slide: function( event, ui ) {
+								
+								if( minTimeRangeVal != ui.values[ 0 ] ){
+									minTimeRangeVal = ui.values[ 0 ];
+									playFrame = ui.values[ 0 ];
+									renderCanvasCtx.drawImage( framesCanvases[ui.values[ 0 ]], 0, 0, mainWidth, mainHeight, 0, 0, renderCanvas.width, renderCanvas.height );
+								};
+								if( maxTimeRangeVal != ui.values[ 1 ] ){
+									maxTimeRangeVal = ui.values[ 1 ];
+									renderCanvasCtx.clearRect( 0, 0, renderCanvas.width, renderCanvas.height );
+									renderCanvasCtx.drawImage( framesCanvases[ui.values[ 1 ]], 0, 0, mainWidth, mainHeight, 0, 0, renderCanvas.width, renderCanvas.height );
+									if( ui.values[ 1 ] -2 > ui.values[ 0 ]){
+										playFrame = ui.values[ 1 ]-2;
+									} else {
+										playFrame = ui.values[ 1 ];
+									}	
+								};
+								if ( minTimeRangeVal < maxTimeRangeVal) {
+									duration.innerHTML = Math.round( ( delays.slice(minTimeRangeVal, maxTimeRangeVal).reduce((x, y) => x + y))/1e3) + MES[4];
+								}
+							}	
+						});
+					});
+					SpinnerPlugin.activityStop();	
 				}
 			reader.readAsArrayBuffer(this.files[0]);
+				
 		};	
 		
 		}, false
@@ -230,6 +236,7 @@
 	function renderCrop(){
 		var minDim = Math.min(renderCanvas.width,renderCanvas.height);
 		// Draw and resize final crop canvas
+		
 		cropCanvas.width = renderCanvas.width;
 		cropCanvas.height = renderCanvas.height;
 		// Resize it accordingly to renderCanvas dimensions, so it will have with and height with shortest renderCanvas's side
@@ -243,8 +250,10 @@
 		cropCanvasBB.style.left = cropPosX + 'px';
 		cropCanvasBB.style.top = cropPosY + 'px';
 		// Draw semitransparent canvas layer with circle in the center
+		
 		maskCanvas.width = cropCanvas.width;
 		maskCanvas.height = cropCanvas.height;
+		
 		maskCtx.fillStyle = "black";
 		maskCtx.fillRect(0, 0, maskCanvas.width, maskCanvas.height);
 		maskCtx.globalCompositeOperation = 'xor';
@@ -254,6 +263,7 @@
 		cropCtx.drawImage(maskCanvas, 0, 0);
 		canvasHolder.style.opacity = 1;
 		// Touch start event 
+		
 		var activeElement;
 		if (regEvents == 0){
 			registerEvents();
@@ -396,18 +406,7 @@
 	// Generate final image to save
 	function createImageToSave(){
 		if (framesCanvases && delays){
-			var delayTime = Math.floor( delays.slice(minTimeRangeVal, maxTimeRangeVal).reduce((x, y) => x + y) );
-			if ( delayTime<=2000 ){
-				fps = 30;
-			} else if ( delayTime>2000 && delayTime <= 4000 ){
-				fps = 25;
-			} else if ( delayTime>4000 && delayTime <= 6000 ){
-				fps = 20;
-			} else if (delayTime>6000 && delayTime<=8000 ){
-				fps = 15;
-			} else {
-				fps = 12;
-			}
+			
 			saveFramesCanvases = [];
 			var titalDuration = delays.reduce((x, y) => x + y);
 			if ( Math.floor( delays.slice(minTimeRangeVal, maxTimeRangeVal).reduce((x, y) => x + y) ) > 10e3){
@@ -416,7 +415,7 @@
 			}
 			SpinnerPlugin.activityStart(MES[1], { dimBackground: true });
 			var frameCount = Math.round( titalDuration/Math.round(1000/fps) );
-			if (maxTimeRangeVal){
+			if (minTimeRangeVal>=0 && maxTimeRangeVal){
 				frameCount = Math.round( (delays.slice(minTimeRangeVal, maxTimeRangeVal).reduce((x, y) => x + y))/Math.round(1000/fps) );
 			}
 			saveFramesCanvases.push(framesCanvases[minTimeRangeVal])
@@ -481,12 +480,12 @@
 										saveCanvas.toBlob(function(blob) {
 											writeFile( fileEntry, blob );
 										}, "image/png", 0.9 );
-									}, errorHandle(e));
-								}, errorHandle());
+									}, function(){});
+								}, function(){});
 							});
-						}, errorHandle(e));
+						}, function(){});
 					});
-				} catch(e){errorHandle(e)};
+				} catch(e){};
 			}	
 		}
 	}
@@ -511,32 +510,12 @@
 					}
 				SpinnerPlugin.activityStop();
 				}
-			fileWriter.onerror = errorHandle(e);
+			fileWriter.onerror = function (e) {};
 			fileWriter.write(dataObj);
 		});
 	}
 	
-	function errorHandle(e){
-		if(e){
-			if (e.message){
-				duration.innerHTML = e.message;
-			} else {
-				duration.innerHTML = e;
-			}
-		} else {
-			duration.innerHTML = 'folder';	
-		}
-		
-		SpinnerPlugin.activityStop();
-	}
-	
-	function errorMassage() {}
-
-	function successMessage( status ) {
-	  if( !status.hasPermission ) errorMassage();
-	}
-	
-	function init(){
+	function init(){	
 		language = navigator.language; 
 	}
 	
