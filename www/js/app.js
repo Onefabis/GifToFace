@@ -133,94 +133,97 @@
 					SpinnerPlugin.activityStart(MES[0], { dimBackground: true })
 					var arrayBuffer = this.result;
 					var gif = new GIF(arrayBuffer);
-					var frames = gif.decompressFrames(true);
-					mainWidth = frames[0].dims.width;
-					mainHeight = frames[0].dims.height;
-					var tempMainCanvas = document.createElement('canvas');
-					tempMainCanvas.width = mainWidth;
-					tempMainCanvas.height = mainHeight;
-					var tempMainCanvasCtx = tempMainCanvas.getContext('2d');
-					for (k = 0; k<frames.length; k++){
-						delays.push(frames[k].delay);
-						var tempCanvas = document.createElement('canvas');
-						tempCanvas.width = frames[0].dims.width;
-						tempCanvas.height = frames[0].dims.height;
-						var tempCanvasCtx = tempCanvas.getContext('2d');
-						
-						tempCanvasCtx.putImageData( new ImageData( frames[k].patch, frames[k].dims.width, frames[k].dims.height ), frames[k].dims.left, frames[k].dims.top, 0, 0, frames[0].dims.width, frames[0].dims.height  );
-						if(frames[k].disposalType==2){
-							tempMainCanvasCtx.fillStyle = "black";
-							tempMainCanvasCtx.fillRect(0, 0, mainWidth, mainHeight);
+					if (gif){
+						var frames = gif.decompressFrames(true);
+						mainWidth = frames[0].dims.width;
+						mainHeight = frames[0].dims.height;
+						var tempMainCanvas = document.createElement('canvas');
+						tempMainCanvas.width = mainWidth;
+						tempMainCanvas.height = mainHeight;
+						var tempMainCanvasCtx = tempMainCanvas.getContext('2d');
+						for (k = 0; k<frames.length; k++){
+							delays.push(frames[k].delay);
+							var tempCanvas = document.createElement('canvas');
+							tempCanvas.width = frames[0].dims.width;
+							tempCanvas.height = frames[0].dims.height;
+							var tempCanvasCtx = tempCanvas.getContext('2d');
+							
+							tempCanvasCtx.putImageData( new ImageData( frames[k].patch, frames[k].dims.width, frames[k].dims.height ), frames[k].dims.left, frames[k].dims.top, 0, 0, frames[0].dims.width, frames[0].dims.height  );
+							if(frames[k].disposalType==2){
+								tempMainCanvasCtx.fillStyle = "black";
+								tempMainCanvasCtx.fillRect(0, 0, mainWidth, mainHeight);
+							}
+							tempMainCanvasCtx.drawImage(tempCanvas, 0, 0 );
+							tempCanvasCtx.drawImage(tempMainCanvas, 0, 0 );
+							framesCanvases[k] = tempCanvas;
 						}
-						tempMainCanvasCtx.drawImage(tempCanvas, 0, 0 );
-						tempCanvasCtx.drawImage(tempMainCanvas, 0, 0 );
-						framesCanvases[k] = tempCanvas;
-					}
-					var delayResult = delays.filter(word => (word));
-					var averageDelay = Math.round( (delayResult.reduce( ( x, y ) => x + y) )/delayResult.length )
-					delays=delays.map(function(elem){ return (!elem)?averageDelay:elem; });
-					
-					canvasHolder.style.visibility = 'visible';
-					canvasHolder.style.opacity = 0;
-					
-					
-					// Check whether parent div smaller than loaded GIF, if so then store multiplier that scale down renderCanvas and renderCanvasDiv
-					if ( animInfo.offsetWidth <= mainWidth || animInfo.offsetHeight <= mainHeight){
-						var offscreenCanvasX = animInfo.offsetWidth/mainWidth;
-						var offscreenCanvasY = animInfo.offsetHeight/mainHeight;
-						resizeMult = Math.min(offscreenCanvasX, offscreenCanvasY)
-					};
-					// Resize renderCanvas element
-					renderCanvasDiv.style.width = mainWidth*resizeMult + 'px';
-					renderCanvasDiv.style.height = mainHeight*resizeMult + 'px';
-					renderCanvas.width = mainWidth*resizeMult;
-					renderCanvas.height = mainHeight*resizeMult;
-					
-					minTimeRangeVal = 0;
-					maxTimeRangeVal = delays.length-1;
-					
-					renderCanvasCtx.drawImage( framesCanvases[0], 0, 0, mainWidth, mainHeight, 0, 0, renderCanvas.width, renderCanvas.height );
-					renderCrop();
-					$(function() {
-						playFrame = 0;
-						duration.innerHTML = Math.round( ( delays.slice(minTimeRangeVal, maxTimeRangeVal).reduce((x, y) => x + y))/1e3 ) + MES[4];
-						// Draw playbak slider with minimal time as minTimeRangeVal and maximum time as maxTimeRangeVal
-						$('#slider-range').slider({
-							range: true,
-							min: 0,
-							max: delays.length-1, 
-							values: [ 0, delays.length-1 ],
-							slide: function( event, ui ) {
-								
-								if( minTimeRangeVal != ui.values[ 0 ] ){
-									minTimeRangeVal = ui.values[ 0 ];
-									playFrame = ui.values[ 0 ];
-									renderCanvasCtx.drawImage( framesCanvases[ui.values[ 0 ]], 0, 0, mainWidth, mainHeight, 0, 0, renderCanvas.width, renderCanvas.height );
-								};
-								if( maxTimeRangeVal != ui.values[ 1 ] ){
-									maxTimeRangeVal = ui.values[ 1 ];
-									renderCanvasCtx.clearRect( 0, 0, renderCanvas.width, renderCanvas.height );
-									renderCanvasCtx.drawImage( framesCanvases[ui.values[ 1 ]], 0, 0, mainWidth, mainHeight, 0, 0, renderCanvas.width, renderCanvas.height );
-									if( ui.values[ 1 ] -2 > ui.values[ 0 ]){
-										playFrame = ui.values[ 1 ]-2;
-									} else {
-										playFrame = ui.values[ 1 ];
-									}	
-								};
-								if ( minTimeRangeVal < maxTimeRangeVal) {
-									duration.innerHTML = Math.round( ( delays.slice(minTimeRangeVal, maxTimeRangeVal).reduce((x, y) => x + y))/1e3) + MES[4];
-								}
-							}	
+						var delayResult = delays.filter(word => (word));
+						var averageDelay = Math.round( (delayResult.reduce( ( x, y ) => x + y) )/delayResult.length )
+						delays=delays.map(function(elem){ return (!elem)?averageDelay:elem; });
+						
+						canvasHolder.style.visibility = 'visible';
+						canvasHolder.style.opacity = 0;
+						
+						
+						// Check whether parent div smaller than loaded GIF, if so then store multiplier that scale down renderCanvas and renderCanvasDiv
+						if ( animInfo.offsetWidth <= mainWidth || animInfo.offsetHeight <= mainHeight){
+							var offscreenCanvasX = animInfo.offsetWidth/mainWidth;
+							var offscreenCanvasY = animInfo.offsetHeight/mainHeight;
+							resizeMult = Math.min(offscreenCanvasX, offscreenCanvasY)
+						};
+						// Resize renderCanvas element
+						renderCanvasDiv.style.width = mainWidth*resizeMult + 'px';
+						renderCanvasDiv.style.height = mainHeight*resizeMult + 'px';
+						renderCanvas.width = mainWidth*resizeMult;
+						renderCanvas.height = mainHeight*resizeMult;
+						
+						minTimeRangeVal = 0;
+						maxTimeRangeVal = delays.length-1;
+						
+						renderCanvasCtx.drawImage( framesCanvases[0], 0, 0, mainWidth, mainHeight, 0, 0, renderCanvas.width, renderCanvas.height );
+						renderCrop();
+						$(function() {
+							playFrame = 0;
+							duration.innerHTML = Math.round( ( delays.slice(minTimeRangeVal, maxTimeRangeVal).reduce((x, y) => x + y))/1e3 ) + MES[4];
+							// Draw playbak slider with minimal time as minTimeRangeVal and maximum time as maxTimeRangeVal
+							$('#slider-range').slider({
+								range: true,
+								min: 0,
+								max: delays.length-1, 
+								values: [ 0, delays.length-1 ],
+								slide: function( event, ui ) {
+									
+									if( minTimeRangeVal != ui.values[ 0 ] ){
+										minTimeRangeVal = ui.values[ 0 ];
+										playFrame = ui.values[ 0 ];
+										renderCanvasCtx.drawImage( framesCanvases[ui.values[ 0 ]], 0, 0, mainWidth, mainHeight, 0, 0, renderCanvas.width, renderCanvas.height );
+									};
+									if( maxTimeRangeVal != ui.values[ 1 ] ){
+										maxTimeRangeVal = ui.values[ 1 ];
+										renderCanvasCtx.clearRect( 0, 0, renderCanvas.width, renderCanvas.height );
+										renderCanvasCtx.drawImage( framesCanvases[ui.values[ 1 ]], 0, 0, mainWidth, mainHeight, 0, 0, renderCanvas.width, renderCanvas.height );
+										if( ui.values[ 1 ] -2 > ui.values[ 0 ]){
+											playFrame = ui.values[ 1 ]-2;
+										} else {
+											playFrame = ui.values[ 1 ];
+										}	
+									};
+									if ( minTimeRangeVal < maxTimeRangeVal) {
+										duration.innerHTML = Math.round( ( delays.slice(minTimeRangeVal, maxTimeRangeVal).reduce((x, y) => x + y))/1e3) + MES[4];
+									}
+								}	
+							});
 						});
-					});
-					SpinnerPlugin.activityStop();	
+						SpinnerPlugin.activityStop();	
+						
+					} else {
+						errorCatcher('gif is not animated')
+					}
 				}
 			reader.readAsArrayBuffer(this.files[0]);
+			reader.onerror = function(){ errorCatcher('file is corrupted') };
+			};	
 			
-			reader.onerror = errorCatcher('gif is not animated')
-				
-		};	
-		
 		}, false
 	);
 	// Div with dashed border, it must be always square 
@@ -417,7 +420,7 @@
 			}
 			SpinnerPlugin.activityStart(MES[1], { dimBackground: true });
 			var frameCount = Math.round( titalDuration/Math.round(1000/fps) );
-			if (minTimeRangeVal>=0 && maxTimeRangeVal){
+			if (minTimeRangeVal && maxTimeRangeVal){
 				frameCount = Math.round( (delays.slice(minTimeRangeVal, maxTimeRangeVal).reduce((x, y) => x + y))/Math.round(1000/fps) );
 			}
 			saveFramesCanvases.push(framesCanvases[minTimeRangeVal])
@@ -482,12 +485,12 @@
 										saveCanvas.toBlob(function(blob) {
 											writeFile( fileEntry, blob );
 										}, "image/png", 0.9 );
-									}, errorCatcher('file in folder not created') );
-								},  errorCatcher('folder not created') );
+									}, function(){errorCatcher('file in new folder is not created')});
+								}, function(){errorCatcher('pictures folder is not created')});
 							});
-						}, errorCatcher('file not created') );
+						}, function(){errorCatcher('file is not created')});
 					});
-				} catch(e){ errorCatcher(e) };
+				} catch(e){errorCatcher(e)};
 			}	
 		}
 	}
@@ -510,12 +513,13 @@
 					}
 				SpinnerPlugin.activityStop();
 				}
-			fileWriter.onerror = errorCatcher(e);
+			fileWriter.onerror = function (e) {};
 			fileWriter.write(dataObj);
 		});
 	}
 	
 	function errorCatcher(e){
+		//console.log(e);
 		SpinnerPlugin.activityStop();
 	}
 	
