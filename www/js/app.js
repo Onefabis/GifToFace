@@ -436,14 +436,13 @@
 				frameCount = Math.round( (delays.slice(minTimeRangeVal, maxTimeRangeVal).reduce((x, y) => x + y))/(1000/fps) );
 			}
 			saveFramesCanvases.push(framesCanvases[minTimeRangeVal])
-			var timeAnchor = delays[minTimeRangeVal];
 			for ( var i=1; i<frameCount; i++ ){
-				var curFrame = i*Math.round(1000/fps);
+				var curFrame = i*(1000/fps);
 				var delaySum = 0;
 				var matchCount = 0;
 				for ( var k=minTimeRangeVal+1; k<delays.length; k++ ){
 					delaySum += delays[k];
-					if( Math.abs(delaySum - curFrame) <= Math.round(1000/fps)/2){
+					if( Math.abs(delaySum - curFrame) <= (1000/fps)/2){
 						saveFramesCanvases.push(framesCanvases[k])
 						matchCount ++;
 						break;
