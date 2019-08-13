@@ -440,7 +440,7 @@
 				var curFrame = i*(1000/fps);
 				var delaySum = 0;
 				var matchCount = 0;
-				for ( var k=minTimeRangeVal+1; k<delays.length; k++ ){
+				for ( var k=minTimeRangeVal+1; k<=delays.length; k++ ){
 					delaySum += delays[k];
 					if( Math.abs(delaySum - curFrame) <= (1000/fps)/2){
 						saveFramesCanvases.push(framesCanvases[k])
