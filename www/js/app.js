@@ -414,11 +414,11 @@
 			
 			saveFramesCanvases = [];
 			var totalDuration = delays.reduce((x, y) => x + y);
-			if ( Math.floor( delays.slice(minTimeRangeVal, maxTimeRangeVal).reduce((x, y) => x + y) ) > 10e3){
-				window.alert( Math.round( delays.slice(minTimeRangeVal, maxTimeRangeVal).reduce((x, y) => x + y)/1e3 )  + MES[3])
+			if ( Math.floor( delays.slice(minTimeRangeVal, maxTimeRangeVal+1).reduce((x, y) => x + y) ) > 10e3){
+				window.alert( Math.round( delays.slice(minTimeRangeVal, maxTimeRangeVal+1).reduce((x, y) => x + y)/1e3 )  + MES[3])
 				return
 			}
-			var rangeDuration = Math.round( delays.slice(minTimeRangeVal, maxTimeRangeVal).reduce((x, y) => x + y) );
+			var rangeDuration = Math.round( delays.slice(minTimeRangeVal, maxTimeRangeVal+1).reduce((x, y) => x + y) );
 			if( rangeDuration > 0 && rangeDuration <= 2000 ){
 				fps = 30;
 			} else if ( rangeDuration > 2000 && rangeDuration <= 4000 ){
@@ -430,11 +430,13 @@
 			} else if ( rangeDuration > 8000 && rangeDuration <= 10000 ){
 				fps = 12;
 			}
-			SpinnerPlugin.activityStart(MES[1], { dimBackground: true });
+			
+			//SpinnerPlugin.activityStart(MES[1], { dimBackground: true });
 			var frameCount = Math.round( totalDuration/(1000/fps) );
 			if (minTimeRangeVal>=0 && maxTimeRangeVal){
-				frameCount = Math.round( (delays.slice(minTimeRangeVal, maxTimeRangeVal).reduce((x, y) => x + y))/(1000/fps) );
+				frameCount = Math.round( (delays.slice(minTimeRangeVal, maxTimeRangeVal+1).reduce((x, y) => x + y))/(1000/fps) );
 			}
+			//console.log(minTimeRangeVal+','+maxTimeRangeVal + ',' + frameCount + ',' + delays.slice(minTimeRangeVal, maxTimeRangeVal+1).reduce((x, y) => x + y));
 			saveFramesCanvases.push(framesCanvases[minTimeRangeVal])
 			for ( var i=1; i<frameCount; i++ ){
 				var curFrame = i*(1000/fps);
