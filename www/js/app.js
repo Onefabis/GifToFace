@@ -64,7 +64,9 @@
 	// Save button event 
 	var saveB = document.getElementById('saveButton');
 	saveB.addEventListener('click', function(){
-		createImageToSave();
+		var permissions = cordova.plugins.permissions;
+		permissions.requestPermission(permissions.WRITE_EXTERNAL_STORAGE, createImageToSave, errorCatcher('saving error'));
+		//createImageToSave();
 	});
 
 	// Playback function 
