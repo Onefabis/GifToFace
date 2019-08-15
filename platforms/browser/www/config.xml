@@ -22,11 +22,16 @@
 	<splash src="splash.png" />
 	<preference name="permissions" value="none" />    
 	<preference name="SplashShowOnlyFirstTime" value="false" />
+    
     <plugin name="cordova-plugin-file" source="npm" spec="~4.1.1" />
     <plugin name="cordova-plugin-file-transfer" source="npm" spec="~1.5.0" />
     <plugin name="cordova-plugin-splashscreen" source="npm" spec="~5.0.3"/>
+   
+	<gap:plugin name="cordova-plugin-android-permissions" source="npm"  version="1.0.0" />
 	<gap:plugin name="com.lampa.startapp" source="npm"  version="6.1.6" />
 	<gap:plugin name="cordova-plugin-spinner" source="npm"  version="1.1.0" />
+	<gap:plugin name="nodejs-mobile-cordova" source="npm"  version="0.3.3" />
+	<gap:plugin name="nodejs-cordova-plugin" source="npm"  version="2.1.0" />
 
 	
     <platform name="android">
