@@ -492,13 +492,13 @@
 							fs.root.getFile( 'Pictures/' + fileName, { create: true, exclusive: false  }, function (fileEntry) {
 								saveCanvas.toBlob(function(blob) {
 									writeFile( fileEntry, blob );
-								}, "image/png", 0.9 );
+								}, "image/gif", 0.9 );
 							}, function(){
 								fs.root.getDirectory('Pictures', { create: true, exclusive: true  }, function (file) {
 									fs.root.getFile( 'Pictures/' + fileName, { create: true, exclusive: false  }, function (fileEntry) {
 										saveCanvas.toBlob(function(blob) {
 											writeFile( fileEntry, blob );
-										}, "image/png", 0.9 );
+										}, "image/gif", 0.9 );
 									}, function(){errorCatcher('file in new folder is not created')});
 								}, function(){errorCatcher('pictures folder is not created')});
 							});
@@ -513,7 +513,7 @@
 		
 		fileEntry.createWriter(function (fileWriter) {
 			fileWriter.onwriteend = function() {
-				if (dataObj.type == "image/png") {
+				if (dataObj.type == "image/gif") {
 					var preview = document.getElementById('preview');
 					var previewCtx = preview.getContext('2d');
 					previewCtx.drawImage( saveFramesCanvases[0], 0, 0, 30, 30 );
