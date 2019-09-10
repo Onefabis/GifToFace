@@ -17,9 +17,9 @@
     } else {
        MES = ['GIF loading...', 'Processing GIF...', 'Please, select image less than: ', ' sec. is too long. Reduce to 10 sec., please. ', ' s.'  ];
     }
-	
+
 	var filesizeLimit = 30e6;
-	
+
 	// contrtol background of playback buttons with checking attribute
 	var playCB = document.getElementById('playCheckbox');
 	var playB = document.getElementById('playButton');
@@ -35,7 +35,7 @@
 			playStatus = 0;
 		}
 	});
-	
+
 	var stopB = document.getElementById('stopButton');
 	stopB.addEventListener('click', function(){
 		playB.style.backgroundPosition = '0px 0px';
@@ -47,7 +47,7 @@
 			renderCanvasCtx.drawImage( framesCanvases[minTimeRangeVal], 0, 0, mainWidth, mainHeight, 0, 0, renderCanvas.width, renderCanvas.height );
 		}
 	});
-	
+
 	var loopCB = document.getElementById('loopCheckbox');
 	var loopB = document.getElementById('loopButton');
 	loopCB.addEventListener('change', function(){
@@ -60,8 +60,8 @@
 			loopB.style.backgroundColor = 'rgba(0,0,0,0)';
 		}
 	});
-	
-	// Save button event 
+
+	// Save button event
 	var saveB = document.getElementById('saveButton');
 	saveB.addEventListener('click', function(){
 		var permissions = cordova.plugins.permissions;
@@ -69,10 +69,10 @@
 		//createImageToSave();
 	});
 
-	// Playback function 
-	var playStatus = 0; 
-	var playFrame = 0; 
-	
+	// Playback function
+	var playStatus = 0;
+	var playFrame = 0;
+
 	function playBack(){
 		if (playStatus == 1){
 			renderCanvasCtx.drawImage( framesCanvases[playFrame], 0, 0, mainWidth, mainHeight, 0, 0, renderCanvas.width, renderCanvas.height );
@@ -84,7 +84,7 @@
 				playFrame = minTimeRangeVal;
 				playB.style.backgroundPosition = '0px 0px';
 				playCB.checked = 0;
-			}	
+			}
 			setTimeout( function(){
 					requestAnimationFrame( playBack );
 			}, delays[playFrame])
@@ -94,7 +94,7 @@
 	var fileOpenLabel = document.getElementById("openLabel");
 	var canvasHolder = document.getElementById('canvasHolder');
 	fileOpenLabel.addEventListener("click", function(event) { fileToRead.click() });
-	
+
 	// Data to play ang generate gif
 	var renderCanvas,
 	renderCanvasCtx,
@@ -112,7 +112,7 @@
 	gifName;
 	// Event that update rendr canvas size, run the giflib script that split gif into frames
 	// each frame will be rendered in separate canvas that stored in framesCanvases array
-	// Every file processing will empty that list, so 
+	// Every file processing will empty that list, so
 	fileToRead.addEventListener("change", function(event) {
 		var files = fileToRead.files;
 		if (files.length) {
@@ -127,9 +127,9 @@
 			renderCanvas = document.getElementById('gifcanvas');
 			renderCanvasDiv = document.getElementById('gifcanvasDiv');
 			renderCanvasCtx = renderCanvas.getContext('2d',{ alpha: true });
-			
+
 			var animInfo = document.getElementById('animInfo');
-			
+
 				var reader = new FileReader();
 				reader.onload = function() {
 					SpinnerPlugin.activityStart(MES[0], { dimBackground: true })
@@ -149,7 +149,7 @@
 							tempCanvas.width = frames[0].dims.width;
 							tempCanvas.height = frames[0].dims.height;
 							var tempCanvasCtx = tempCanvas.getContext('2d');
-							
+
 							tempCanvasCtx.putImageData( new ImageData( frames[k].patch, frames[k].dims.width, frames[k].dims.height ), frames[k].dims.left, frames[k].dims.top, 0, 0, frames[0].dims.width, frames[0].dims.height  );
 							if(frames[k].disposalType==2){
 								tempMainCanvasCtx.fillStyle = "black";
@@ -162,11 +162,11 @@
 						var delayResult = delays.filter(word => (word));
 						var averageDelay = Math.round( (delayResult.reduce( ( x, y ) => x + y) )/delayResult.length )
 						delays=delays.map(function(elem){ return (!elem)?averageDelay:elem; });
-						
+
 						canvasHolder.style.visibility = 'visible';
 						canvasHolder.style.opacity = 0;
-						
-						
+
+
 						// Check whether parent div smaller than loaded GIF, if so then store multiplier that scale down renderCanvas and renderCanvasDiv
 						if ( animInfo.offsetWidth <= mainWidth || animInfo.offsetHeight <= mainHeight){
 							var offscreenCanvasX = animInfo.offsetWidth/mainWidth;
@@ -178,10 +178,10 @@
 						renderCanvasDiv.style.height = mainHeight*resizeMult + 'px';
 						renderCanvas.width = mainWidth*resizeMult;
 						renderCanvas.height = mainHeight*resizeMult;
-						
+
 						minTimeRangeVal = 0;
 						maxTimeRangeVal = delays.length-1;
-						
+
 						renderCanvasCtx.drawImage( framesCanvases[0], 0, 0, mainWidth, mainHeight, 0, 0, renderCanvas.width, renderCanvas.height );
 						renderCrop();
 						$(function() {
@@ -191,10 +191,10 @@
 							$('#slider-range').slider({
 								range: true,
 								min: 0,
-								max: delays.length-1, 
+								max: delays.length-1,
 								values: [ 0, delays.length-1 ],
 								slide: function( event, ui ) {
-									
+
 									if( minTimeRangeVal != ui.values[ 0 ] ){
 										minTimeRangeVal = ui.values[ 0 ];
 										playFrame = ui.values[ 0 ];
@@ -208,27 +208,27 @@
 											playFrame = ui.values[ 1 ]-2;
 										} else {
 											playFrame = ui.values[ 1 ];
-										}	
+										}
 									};
 									if ( minTimeRangeVal < maxTimeRangeVal) {
 										duration.innerHTML = Math.round( ( delays.slice(minTimeRangeVal, maxTimeRangeVal).reduce((x, y) => x + y))/1e3) + MES[4];
 									}
-								}	
+								}
 							});
 						});
-						SpinnerPlugin.activityStop();	
-						
+						SpinnerPlugin.activityStop();
+
 					} else {
 						errorCatcher('gif is not animated')
 					}
 				}
 			reader.readAsArrayBuffer(this.files[0]);
 			reader.onerror = function(){ errorCatcher('file is corrupted') };
-			};	
-			
+			};
+
 		}, false
 	);
-	// Div with dashed border, it must be always square 
+	// Div with dashed border, it must be always square
 	var cropCanvasBB = document.getElementById('cropCanvasBB');
 	// Div which will catch mouse events
 	var cropMouse = document.getElementById('cropMouse');
@@ -239,11 +239,11 @@
 	var pressCropStatus = 0;
 	var pressResizeStatus = 0;
 	var maskCtx = maskCanvas.getContext('2d');
-	
+
 	function renderCrop(){
 		var minDim = Math.min(renderCanvas.width,renderCanvas.height);
 		// Draw and resize final crop canvas
-		
+
 		cropCanvas.width = renderCanvas.width;
 		cropCanvas.height = renderCanvas.height;
 		// Resize it accordingly to renderCanvas dimensions, so it will have with and height with shortest renderCanvas's side
@@ -257,10 +257,10 @@
 		cropCanvasBB.style.left = cropPosX + 'px';
 		cropCanvasBB.style.top = cropPosY + 'px';
 		// Draw semitransparent canvas layer with circle in the center
-		
+
 		maskCanvas.width = cropCanvas.width;
 		maskCanvas.height = cropCanvas.height;
-		
+
 		maskCtx.fillStyle = "black";
 		maskCtx.fillRect(0, 0, maskCanvas.width, maskCanvas.height);
 		maskCtx.globalCompositeOperation = 'xor';
@@ -269,17 +269,17 @@
 		cropCtx.globalAlpha = 0.75;
 		cropCtx.drawImage(maskCanvas, 0, 0);
 		canvasHolder.style.opacity = 1;
-		// Touch start event 
-		
+		// Touch start event
+
 		var activeElement;
 		if (regEvents == 0){
 			registerEvents();
 			regEvents = 1;
 		}
 	}
-	
+
 	function registerEvents(){
-		canvasHolder.addEventListener('touchstart', 
+		canvasHolder.addEventListener('touchstart',
 			function(ev){
 				var e = ev.touches[0];
 				var elementMouseIsOver = document.elementsFromPoint(e.clientX, e.clientY );
@@ -292,7 +292,7 @@
 					oldPosY = e.clientY;
 					pressCropStatus = 1
 				}
-				
+
 				if( ids.includes('cropMouse') ){
 					if( !ids.includes('cropBBHandle1' ) && !ids.includes('cropBBHandle2' ) && !ids.includes('cropBBHandle3' ) && !ids.includes('cropBBHandle4' ) ){
 						activeElement = 'cropMouse'
@@ -308,14 +308,14 @@
 						}
 					}
 				}
-				
-				
-			}, false 
+
+
+			}, false
 		);
 		var oldPosX = 0;
 		var oldPosY = 0;
-		// Touch drag event 
-		canvasHolder.addEventListener( 'touchmove', 
+		// Touch drag event
+		canvasHolder.addEventListener( 'touchmove',
 			function(ev){
 				var e = ev.touches[0];
 				var elementMouseIsOver = document.elementsFromPoint(e.clientX, e.clientY );
@@ -391,29 +391,29 @@
 						maskCtx.fill();
 						cropCtx.globalAlpha = 0.75;
 						cropCtx.drawImage(maskCanvas, 0, 0);
-					
-					
+
+
 				}
 			//console.log(elementMouseIsOver.id)
 			}
 		, false);
-		// Touch release event 
-		canvasHolder.addEventListener('touchend', 
+		// Touch release event
+		canvasHolder.addEventListener('touchend',
 			function(ev){
 				pressCropStatus = 0;
-		}, false);	
-	
+		}, false);
+
 	}
-	
+
 	var saveCanvas,
 	saveCanvasCtx,
 	saveFramesCanvases,
 	fps = 20;
-	
+
 	// Generate final image to save
 	function createImageToSave(){
 		if (framesCanvases && delays){
-			
+
 			saveFramesCanvases = [];
 			var totalDuration = delays.reduce((x, y) => x + y);
 			if ( Math.floor( delays.slice(minTimeRangeVal, maxTimeRangeVal+1).reduce((x, y) => x + y) ) > 10e3){
@@ -432,7 +432,7 @@
 			} else if ( rangeDuration > 8000 && rangeDuration <= 10000 ){
 				fps = 12;
 			}
-			
+
 			SpinnerPlugin.activityStart(MES[1], { dimBackground: true });
 			var frameCount = Math.round( totalDuration/(1000/fps) );
 			if (minTimeRangeVal>=0 && maxTimeRangeVal){
@@ -449,11 +449,11 @@
 						saveFramesCanvases.push(framesCanvases[k])
 						matchCount ++;
 						break;
-					} 
+					}
 				}
 				if( matchCount == 0){
 					saveFramesCanvases.push(null);
-				}	
+				}
 			}
 			if (saveFramesCanvases){
 				saveCanvas = document.createElement('canvas');
@@ -467,7 +467,7 @@
 				tempSaveCanvasCtx.clearRect(0,0,360,360);
 				var saveMinDim = Math.min( mainWidth,mainHeight );
 				for ( var z=0; z < Math.ceil(saveFramesCanvases.length/fps)*fps; z++ ){
-					
+
 					if ( z<saveFramesCanvases.length){
 						if(saveFramesCanvases[z]){
 							var minCropDimSave = Math.min( parseInt(cropCanvasBB.style.width),parseInt(cropCanvasBB.style.height) )
@@ -483,41 +483,41 @@
 							//tempSaveCanvasCtx.drawImage( saveFramesCanvases[z], cropPosX/resizeMult, cropPosY/resizeMult, saveMinDim, saveMinDim, 0, 0, 360, 360 )
 						}
 						saveCanvasCtx.drawImage( tempSaveCanvas, 0, 0, 360, 360, 360*z-360*fps*Math.floor(z/fps), 360*( Math.floor(z/fps) ), 360, 360 );
-					} 
+					}
 				}
 				try{
-					document.addEventListener("deviceready", function() {					
+					document.addEventListener("deviceready", function() {
 						window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
 							var fileName = gifName.substring(0, gifName.lastIndexOf('.') ) + '_toGear.gif';
 							fs.root.getFile( 'Pictures/' + fileName, { create: true, exclusive: false  }, function (fileEntry) {
 								saveCanvas.toBlob(function(blob) {
 									writeFile( fileEntry, blob );
-								}, "image/gif", 0.9 );
+								}, "image/gif" );
 							}, function(){
 								fs.root.getDirectory('Pictures', { create: true, exclusive: true  }, function (file) {
 									fs.root.getFile( 'Pictures/' + fileName, { create: true, exclusive: false  }, function (fileEntry) {
 										saveCanvas.toBlob(function(blob) {
 											writeFile( fileEntry, blob );
-										}, "image/gif", 0.9 );
+										}, "image/gif" );
 									}, function(){errorCatcher('file in new folder is not created')});
 								}, function(){errorCatcher('pictures folder is not created')});
 							});
 						}, function(){errorCatcher('file is not created')});
 					});
 				} catch(e){errorCatcher(e)};
-			}	
+			}
 		}
 	}
-	
+
 	function writeFile(fileEntry, dataObj) {
-		
+
 		fileEntry.createWriter(function (fileWriter) {
 			fileWriter.onwriteend = function() {
 				if (dataObj.type == "image/gif") {
 					var preview = document.getElementById('preview');
 					var previewCtx = preview.getContext('2d');
 					previewCtx.drawImage( saveFramesCanvases[0], 0, 0, 30, 30 );
-					preview.onclick = function() { 
+					preview.onclick = function() {
 						startApp.set({
 							"action": "ACTION_VIEW",
 							"flags":["FLAG_ACTIVITY_NEW_TASK"],
@@ -531,15 +531,15 @@
 			fileWriter.write(dataObj);
 		});
 	}
-	
+
 	function errorCatcher(e){
 		//console.log(e);
 		SpinnerPlugin.activityStop();
 	}
-	
-	function init(){	
-		language = navigator.language; 
+
+	function init(){
+		language = navigator.language;
 	}
-	
+
     window.onload = init();
 }());
