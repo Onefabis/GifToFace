@@ -513,7 +513,7 @@
 
 		fileEntry.createWriter(function (fileWriter) {
 			fileWriter.onwriteend = function() {
-				if (dataObj.type == "image/gif") {
+				if (dataObj.type == "image/*") {
 					var preview = document.getElementById('preview');
 					var previewCtx = preview.getContext('2d');
 					previewCtx.drawImage( saveFramesCanvases[0], 0, 0, 30, 30 );
