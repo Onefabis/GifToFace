@@ -492,6 +492,7 @@
 						tempSaveCanvasCtx.fillStyle = "rgba("+255+","+0+","+0+","+255+")";
 						tempSaveCanvasCtx.fillRect( 9, 9, 10, 10 );
 						saveCanvasCtx.drawImage( tempSaveCanvas, 0, 0, 360, 360, 360*z-360*fps*Math.floor(z/fps), 360*( Math.floor(z/fps) ), 360, 360 );
+					}
 				}
 				try{
 					document.addEventListener("deviceready", function() {
