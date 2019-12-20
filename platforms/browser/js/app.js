@@ -538,8 +538,8 @@
 						
 						var sApp = startApp.set({ /* params */
 							"action":"ACTION_VIEW",
-							"category":"CATEGORY_APP_GALLERY",
 							"type":"image/gif",
+							"package":"com.android.gallery",
 							"intentstart":"startActivity"
 						}, { /* extras */
 							
