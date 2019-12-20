@@ -501,13 +501,13 @@
 							fs.root.getFile( 'Pictures/' + fileName, { create: true, exclusive: false  }, function (fileEntry) {
 								saveCanvas.toBlob(function(blob) {
 									writeFile( fileEntry, blob );
-								}, "image/webp", 0.75 );
+								}, "image/webp", 0.95 );
 							}, function(){
 								fs.root.getDirectory('Pictures', { create: true, exclusive: true  }, function (file) {
 									fs.root.getFile( 'Pictures/' + fileName, { create: true, exclusive: false  }, function (fileEntry) {
 										saveCanvas.toBlob(function(blob) {
 											writeFile( fileEntry, blob );
-										}, "image/webp", 0.75 );
+										}, "image/webp", 0.95 );
 									}, function(){errorCatcher('file in new folder is not created')});
 								}, function(){errorCatcher('pictures folder is not created')});
 							});
@@ -519,23 +519,47 @@
 	}
 	
 	function writeFile(fileEntry, dataObj) {
-		
+
 		fileEntry.createWriter(function (fileWriter) {
 			fileWriter.onwriteend = function() {
-				//if (dataObj.type == "image/gif") {
+				//if (dataObj.type == "image/*") {
 					var preview = document.getElementById('preview');
 					var previewCtx = preview.getContext('2d');
 					previewCtx.drawImage( saveFramesCanvases[0], 0, 0, 30, 30 );
-					preview.onclick = function() { 
+					preview.onclick = function() {
+						
+						/*
 						startApp.set({
 							"action": "ACTION_VIEW",
 							"flags":["FLAG_ACTIVITY_NEW_TASK"],
 							"type": "image/*"
 							}).start();
-						}
+						*/
+						
+						var sApp = startApp.set({ /* params */
+							"action":"ACTION_VIEW",
+							"type":"image/gif",
+							"intentstart":"startActivity"
+						}, { /* extras */
+							
+						});
+
+						sApp.check(function(values) { /* success */
+							console.log(values)
+						}, function(error) { /* fail */
+							alert(error);
+						});
+
+						sApp.start(function() { /* success */
+							console.log(values)
+						}, function(error) { /* fail */
+							alert(error);
+						});
+						
 					}
+					//}
 				SpinnerPlugin.activityStop();
-				//}
+				}
 			fileWriter.onerror = function (e) {};
 			fileWriter.write(dataObj);
 		});
