@@ -490,7 +490,7 @@
 						tempSaveCanvasCtx.fillStyle = "rgba("+0+","+255+","+0+","+255+")";
 						tempSaveCanvasCtx.fillRect( 2, 2, 4, 4 );
 						tempSaveCanvasCtx.fillStyle = "rgba("+255+","+0+","+0+","+255+")";
-						tempSaveCanvasCtx.fillRect( 9, 9, 4, 4 );
+						tempSaveCanvasCtx.fillRect( 9, 9, 10, 10 );
 						saveCanvasCtx.drawImage( tempSaveCanvas, 0, 0, 360, 360, 360*z-360*fps*Math.floor(z/fps), 360*( Math.floor(z/fps) ), 360, 360 );
 				}
 				try{
@@ -521,7 +521,7 @@
 
 		fileEntry.createWriter(function (fileWriter) {
 			fileWriter.onwriteend = function() {
-				if (dataObj.type == "image/*") {
+				//if (dataObj.type == "image/*") {
 					var preview = document.getElementById('preview');
 					var previewCtx = preview.getContext('2d');
 					previewCtx.drawImage( saveFramesCanvases[0], 0, 0, 30, 30 );
@@ -532,7 +532,7 @@
 							"type": "image/*"
 							}).start();
 						}
-					}
+					//}
 				SpinnerPlugin.activityStop();
 				}
 			fileWriter.onerror = function (e) {};
