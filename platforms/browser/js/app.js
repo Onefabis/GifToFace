@@ -479,8 +479,8 @@
 							// fill 3x 3y pixel with green color 
 							tempSaveCanvasCtx.fillStyle = "rgba("+0+","+255+","+0+","+255+")";
 							tempSaveCanvasCtx.fillRect( 2, 2, 4, 4 );
-							tempSaveCanvasCtx.fillStyle = "rgba("+255+","+0+","+0+","+255+")";
-							tempSaveCanvasCtx.fillRect( 9, 9, 4, 4 );
+							//tempSaveCanvasCtx.fillStyle = "rgba("+255+","+0+","+0+","+255+")";
+							//tempSaveCanvasCtx.fillRect( 9, 9, 4, 4 );
 							//tempSaveCanvasCtx.drawImage( saveFramesCanvases[z], cropPosX/resizeMult, cropPosY/resizeMult, saveMinDim, saveMinDim, 0, 0, 360, 360 )
 						}
 						saveCanvasCtx.drawImage( tempSaveCanvas, 0, 0, 360, 360, 360*z-360*fps*Math.floor(z/fps), 360*( Math.floor(z/fps) ), 360, 360 );
