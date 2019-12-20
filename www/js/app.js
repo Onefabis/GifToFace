@@ -476,10 +476,11 @@
 							tempSaveCanvasCtx.drawImage( saveFramesCanvases[z], xMinPos/resizeMult, yMinPos/resizeMult, minCropDimSave/resizeMult, minCropDimSave/resizeMult, 0, 0, 360, 360 )
 						} else {
 							tempSaveCanvasCtx.clearRect(0,0,360,360);
+							// fill 3x 3y pixel with green color 
 							tempSaveCanvasCtx.fillStyle = "rgba("+0+","+255+","+0+","+255+")";
 							tempSaveCanvasCtx.fillRect( 2, 2, 4, 4 );
-							tempSaveCanvasCtx.fillStyle = "rgba("+0+","+0+","+0+","+0+")";
-							tempSaveCanvasCtx.fillRect( 9, 9, 3, 3 );
+							tempSaveCanvasCtx.fillStyle = "rgba("+255+","+0+","+0+","+255+")";
+							tempSaveCanvasCtx.fillRect( 9, 9, 4, 4 );
 							//tempSaveCanvasCtx.drawImage( saveFramesCanvases[z], cropPosX/resizeMult, cropPosY/resizeMult, saveMinDim, saveMinDim, 0, 0, 360, 360 )
 						}
 						saveCanvasCtx.drawImage( tempSaveCanvas, 0, 0, 360, 360, 360*z-360*fps*Math.floor(z/fps), 360*( Math.floor(z/fps) ), 360, 360 );
@@ -492,13 +493,13 @@
 							fs.root.getFile( 'Pictures/' + fileName, { create: true, exclusive: false  }, function (fileEntry) {
 								saveCanvas.toBlob(function(blob) {
 									writeFile( fileEntry, blob );
-								}, "image/gif" );
+								}, "image/webp", 0.75 );
 							}, function(){
 								fs.root.getDirectory('Pictures', { create: true, exclusive: true  }, function (file) {
 									fs.root.getFile( 'Pictures/' + fileName, { create: true, exclusive: false  }, function (fileEntry) {
 										saveCanvas.toBlob(function(blob) {
 											writeFile( fileEntry, blob );
-										}, "image/gif" );
+										}, "image/webp", 0.75 );
 									}, function(){errorCatcher('file in new folder is not created')});
 								}, function(){errorCatcher('pictures folder is not created')});
 							});
